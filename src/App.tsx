@@ -4,6 +4,8 @@ import { ReactQueryDevtools } from "react-query/devtools";
 import { useState } from "react";
 import { Route } from "react-router-dom";
 import { darkTheme, lightTheme } from "./theme";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import { isDarkAtom } from "./atoms";
 
 const GlobalStyle = createGlobalStyle`
 @import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400&display=swap');
@@ -69,45 +71,38 @@ a{
 `;
 
 const Buttons = styled.div`
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  display: flex;
   margin: 25px 16px;
-  gap: 10px;
+  align-items: center;
+  justify-content: center;
 `;
 
-const Button = styled.button<{ isActive: boolean }>`
+const Button = styled.button`
+  max-width: 480px;
   text-align: center;
   text-transform: uppercase;
   font-size: 12px;
   font-weight: 400;
   background-color: rgba(0, 0, 0,0.5);
-  padding: 16px 0px;
+  padding:16px 16px;
   border-radius: 10px;
-  color: ${(props) => props.isActive ? props.theme.accentColor : props.theme.textColor};
-  a {
-    display: block;
-  }
+  color: ${(props) => props.theme.accentColor};
 `;
 
 
 function App() {
-  const [darkmode, setDarkmode] = useState(true);
-  const onClickDarkmode = () => setDarkmode(true);
-  const onClickLightmode = () => setDarkmode(false);
+  const darkAtom = useRecoilValue(isDarkAtom);
+  const setDarkAtom = useSetRecoilState(isDarkAtom);
+  const onclickBtn = () => setDarkAtom((props) => !props)
   function ModeBtn() {
     return (
       <Buttons>
-        <Button isActive={darkmode == true} onClick={onClickDarkmode}>
-          darkmode
-        </Button>
-        <Button isActive={darkmode !== true} onClick={onClickLightmode}>
-          lightmode
-        </Button>
-      </Buttons>
+        <Button onClick={onclickBtn}>mode btn</Button>
+      </Buttons >
     )
   }
   return (
-    <ThemeProvider theme={darkmode ? darkTheme : lightTheme} >
+    <ThemeProvider theme={darkAtom ? darkTheme : lightTheme} >
       <ModeBtn />
       <GlobalStyle />
       <Router />

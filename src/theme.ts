@@ -7,7 +7,7 @@ export const darkTheme: DefaultTheme = {
   boxColor: "#FFFFFF",
 };
 export const lightTheme: DefaultTheme = {
-  bgColor: "#FFFFFF",
+  bgColor: "whitesmoke",
   textColor: "#000000",
   accentColor: "#FF0000",
   boxColor: "#000000",
